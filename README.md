@@ -1,7 +1,8 @@
 # Gooey Carousel
 
 Package to implements a gooey carousel created by gskinner team.
-<img src="https://github.com/davidsdearaujo/gooey_carousel/blob/master/screenshots/screenshot_1.png?raw=true" width="49.5%" /> <img src="https://github.com/davidsdearaujo/select_dialog/blob/master/screenshots/screenshot_2.png?raw=true" width="49.5%" />
+
+<img src="https://github.com/davidsdearaujo/gooey_carousel/blob/master/screenshots/screenshot_1.gif?raw=true" width="49.5%" /> <img src="https://github.com/davidsdearaujo/select_dialog/blob/master/screenshots/screenshot_2.gif?raw=true" width="49.5%" />
 
 ## pubspec.yaml
 ```yaml
