@@ -7,3 +7,7 @@
 
 * Pub health suggestions apply.
 
+
+## [0.1.2] - 2019 December, 13.
+
+* Readme update.
