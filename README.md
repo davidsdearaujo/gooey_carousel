@@ -14,9 +14,15 @@ Package to implements a gooey carousel created by gskinner team.
 import 'package:gooey_carousel/gooey_carrousel.dart';
 ```
 
-## simple example
+## Simple example
 ```dart
-
+GooeyCarousel(
+  children: <Widget>[
+    Container(color: Colors.red),
+    Container(color: Colors.blue),
+    Container(color: Colors.green),
+  ],
+)
 ```
 
 ## Getting Started
