@@ -100,7 +100,7 @@ class GooeyCarouselState extends State<GooeyCarousel>
   }
 
   void _handlePanUpdate(DragUpdateDetails details, Size size) {
-    double dx = details.globalPosition.dx - _dragOffset!.dx??0;
+    double dx = details.globalPosition.dx - _dragOffset!.dx ;
 
     if (!_isSwipeActive(dx)) {
       return;
