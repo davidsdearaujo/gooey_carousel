@@ -4,10 +4,10 @@ import 'dart:math';
 import 'package:flutter/scheduler.dart';
 
 class ContentCard extends StatefulWidget {
-  final String color;
-  final Color altColor;
-  final String title;
-  final String subtitle;
+  final String? color;
+  final Color? altColor;
+  final String? title;
+  final String? subtitle;
 
   ContentCard({this.color, this.title = "", this.subtitle, this.altColor}) : super();
 
@@ -16,7 +16,7 @@ class ContentCard extends StatefulWidget {
 }
 
 class _ContentCardState extends State<ContentCard> {
-  Ticker _ticker;
+  late Ticker _ticker;
 
   @override
   void initState() {
@@ -90,10 +90,10 @@ class _ContentCardState extends State<ContentCard> {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
       children: <Widget>[
-        Text(widget.title,
+        Text(widget.title??'',
             textAlign: TextAlign.center,
             style: TextStyle(height: 1.2, fontSize: 30.0, fontFamily: 'DMSerifDisplay', color: Colors.white)),
-        Text(widget.subtitle,
+        Text(widget.subtitle??'',
             textAlign: TextAlign.center,
             style: TextStyle(fontSize: 14.0, fontWeight: FontWeight.w300, fontFamily: 'OpenSans', color: Colors.white)),
         Padding(
