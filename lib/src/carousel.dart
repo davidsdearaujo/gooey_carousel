@@ -7,10 +7,10 @@ import 'gooey_edge_clipper.dart';
 
 class GooeyCarousel extends StatefulWidget {
   final List<Widget> children;
-  final void Function(int index) onIndexUpdate;
+  final void Function(int? index)? onIndexUpdate;
 
   GooeyCarousel({
-    @required this.children,
+    required this.children,
     this.onIndexUpdate,
   }) : super();
 
@@ -20,23 +20,24 @@ class GooeyCarousel extends StatefulWidget {
 
 class GooeyCarouselState extends State<GooeyCarousel>
     with SingleTickerProviderStateMixin {
-  int _index = 0; // index of the base (bottom) child
-  Offset _dragOffset; // starting offset of the drag
-  double _dragDirection; // +1 when dragging left to right, -1 for right to left
+  int? _index = 0; // index of the base (bottom) child
+  late Offset _dragOffset; // starting offset of the drag
+  double?
+      _dragDirection; // +1 when dragging left to right, -1 for right to left
 
-  bool _dragCompleted; // has the drag successfully resulted in a swipe
+  late bool _dragCompleted; // has the drag successfully resulted in a swipe
   bool get dragCompleted => _dragCompleted;
   set dragCompleted(bool value) {
     _dragCompleted = value;
     if (value && widget.onIndexUpdate != null) {
-      widget.onIndexUpdate(_dragIndex);
+      widget.onIndexUpdate!(_dragIndex);
     }
   }
 
-  int _dragIndex; // index of the top child
+  int? _dragIndex; // index of the top child
 
-  GooeyEdge _edge;
-  Ticker _ticker;
+  GooeyEdge? _edge;
+  late Ticker _ticker;
   GlobalKey _key = GlobalKey();
 
   @override
@@ -53,7 +54,7 @@ class GooeyCarouselState extends State<GooeyCarousel>
   }
 
   void _tick(Duration duration) {
-    _edge.tick(duration);
+    _edge!.tick(duration);
     setState(() {});
   }
 
@@ -68,20 +69,21 @@ class GooeyCarouselState extends State<GooeyCarousel>
         onPanEnd: (details) => _handlePanEnd(details, _getSize()),
         child: Stack(
           children: <Widget>[
-            widget.children[_index % l],
+            widget.children[_index! % l],
             _dragIndex == null
                 ? SizedBox()
                 : ClipPath(
-                    child: widget.children[_dragIndex % l],
+                    child: widget.children[_dragIndex! % l],
                     clipBehavior: Clip.hardEdge,
-                    clipper: GooeyEdgeClipper(_edge, margin: 10.0),
+                    clipper: GooeyEdgeClipper(_edge, margin: 10.0)
+                        as CustomClipper<Path>,
                   ),
           ],
         ));
   }
 
   Size _getSize() {
-    final RenderBox box = _key.currentContext.findRenderObject();
+    final RenderBox box = _key.currentContext!.findRenderObject() as RenderBox;
     return box.size;
   }
 
@@ -94,9 +96,9 @@ class GooeyCarouselState extends State<GooeyCarousel>
     dragCompleted = false;
     _dragDirection = 0;
 
-    _edge.farEdgeTension = 0.0;
-    _edge.edgeTension = 0.01;
-    _edge.reset();
+    _edge!.farEdgeTension = 0.0;
+    _edge!.edgeTension = 0.01;
+    _edge!.reset();
   }
 
   void _handlePanUpdate(DragUpdateDetails details, Size size) {
@@ -112,16 +114,16 @@ class GooeyCarouselState extends State<GooeyCarousel>
     if (_dragDirection == -1) {
       dx = size.width + dx;
     }
-    _edge.applyTouchOffset(Offset(dx, details.localPosition.dy), size);
+    _edge!.applyTouchOffset(Offset(dx, details.localPosition.dy), size);
   }
 
   bool _isSwipeActive(double dx) {
     // check if a swipe is just starting:
     if (_dragDirection == 0.0 && dx.abs() > 20.0) {
       _dragDirection = dx.sign;
-      _edge.side = _dragDirection == 1.0 ? Side.left : Side.right;
+      _edge!.side = _dragDirection == 1.0 ? Side.left : Side.right;
       setState(() {
-        _dragIndex = _index - _dragDirection.toInt();
+        _dragIndex = _index! - _dragDirection!.toInt();
       });
     }
     return _dragDirection != 0.0;
@@ -140,18 +142,18 @@ class GooeyCarouselState extends State<GooeyCarousel>
     if (_dragDirection == 1) {
       availW = width - availW;
     }
-    double ratio = dx * _dragDirection / availW;
+    double ratio = dx * _dragDirection! / availW;
 
     if (ratio > 0.8 && availW / width > 0.5) {
       dragCompleted = true;
-      _edge.farEdgeTension = 0.01;
-      _edge.edgeTension = 0.0;
-      _edge.applyTouchOffset();
+      _edge!.farEdgeTension = 0.01;
+      _edge!.edgeTension = 0.0;
+      _edge!.applyTouchOffset();
     }
     return dragCompleted;
   }
 
   void _handlePanEnd(DragEndDetails details, Size size) {
-    _edge.applyTouchOffset();
+    _edge!.applyTouchOffset();
   }
 }

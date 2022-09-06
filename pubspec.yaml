@@ -1,13 +1,12 @@
 name: gooey_carousel
 description: Package to implements a gooey carousel created by gskinner team
 version: 0.1.2
-author: Flutterando Team <david@flutterando.com.br>
 homepage: https://flutterando.com.br/
 git: https://github.com/davidsdearaujo/gooey_carousel
 repository: https://github.com/davidsdearaujo/gooey_carousel
 
 environment:
-  sdk: ">=2.1.0 <3.0.0"
+  sdk: ">=2.17.0 <3.3.0"
 
 dependencies:
   flutter:
