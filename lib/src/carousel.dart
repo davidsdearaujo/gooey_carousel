@@ -7,10 +7,10 @@ import 'gooey_edge_clipper.dart';
 
 class GooeyCarousel extends StatefulWidget {
   final List<Widget> children;
-  final void Function(int index) onIndexUpdate;
+  final void Function(int index)? onIndexUpdate;
 
   GooeyCarousel({
-    @required this.children,
+    required this.children,
     this.onIndexUpdate,
   }) : super();
 
@@ -21,22 +21,22 @@ class GooeyCarousel extends StatefulWidget {
 class GooeyCarouselState extends State<GooeyCarousel>
     with SingleTickerProviderStateMixin {
   int _index = 0; // index of the base (bottom) child
-  Offset _dragOffset; // starting offset of the drag
-  double _dragDirection; // +1 when dragging left to right, -1 for right to left
+  Offset? _dragOffset; // starting offset of the drag
+  late double _dragDirection; // +1 when dragging left to right, -1 for right to left
 
-  bool _dragCompleted; // has the drag successfully resulted in a swipe
-  bool get dragCompleted => _dragCompleted;
+    bool? _dragCompleted=false; // has the drag successfully resulted in a swipe
+  bool get dragCompleted => _dragCompleted!;
   set dragCompleted(bool value) {
     _dragCompleted = value;
     if (value && widget.onIndexUpdate != null) {
-      widget.onIndexUpdate(_dragIndex);
+      widget.onIndexUpdate!(_dragIndex);
     }
   }
 
-  int _dragIndex; // index of the top child
+    late int _dragIndex=0; // index of the top child
 
-  GooeyEdge _edge;
-  Ticker _ticker;
+  late GooeyEdge _edge;
+  late Ticker _ticker;
   GlobalKey _key = GlobalKey();
 
   @override
@@ -81,7 +81,7 @@ class GooeyCarouselState extends State<GooeyCarousel>
   }
 
   Size _getSize() {
-    final RenderBox box = _key.currentContext.findRenderObject();
+    final RenderBox box = _key.currentContext!.findRenderObject() as RenderBox;
     return box.size;
   }
 
@@ -89,7 +89,7 @@ class GooeyCarouselState extends State<GooeyCarousel>
     if (_dragIndex != null && dragCompleted) {
       _index = _dragIndex;
     }
-    _dragIndex = null;
+    _dragIndex = 0;
     _dragOffset = details.localPosition;
     dragCompleted = false;
     _dragDirection = 0;
@@ -100,7 +100,7 @@ class GooeyCarouselState extends State<GooeyCarousel>
   }
 
   void _handlePanUpdate(DragUpdateDetails details, Size size) {
-    double dx = details.globalPosition.dx - _dragOffset.dx;
+    double dx = details.globalPosition.dx - _dragOffset!.dx ;
 
     if (!_isSwipeActive(dx)) {
       return;
@@ -136,7 +136,7 @@ class GooeyCarouselState extends State<GooeyCarousel>
     } // already done
 
     // check if swipe is just completed:
-    double availW = _dragOffset.dx;
+    double availW = _dragOffset!.dx;
     if (_dragDirection == 1) {
       availW = width - availW;
     }

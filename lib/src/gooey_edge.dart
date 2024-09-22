@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'side.dart';
 
 class GooeyEdge {
-  List<_GooeyPoint> points;
+  late List<_GooeyPoint> points;
   Side side;
   double edgeTension = 0.01;
   double farEdgeTension = 0.0;
@@ -14,7 +14,7 @@ class GooeyEdge {
   double maxTouchDistance = 0.15;
   int lastT = 0;
 
-  FractionalOffset touchOffset;
+  FractionalOffset? touchOffset;
 
   GooeyEdge({count = 10, this.side = Side.left}) {
     points = [];
@@ -27,12 +27,12 @@ class GooeyEdge {
     points.forEach((pt) => pt.x = pt.velX = pt.velY = 0.0);
   }
 
-  void applyTouchOffset([Offset offset, Size size]) {
+  void applyTouchOffset([Offset? offset, Size? size]) {
     if (offset == null) {
       touchOffset = null;
       return;
     }
-    FractionalOffset o = FractionalOffset.fromOffsetAndSize(offset, size);
+    FractionalOffset o = FractionalOffset.fromOffsetAndSize(offset, size!);
     if (side == Side.left) {
       touchOffset = o;
     } else if (side == Side.right) {
@@ -44,7 +44,7 @@ class GooeyEdge {
     }
   }
 
-  Path buildPath(Size size, {double margin = 0.0}) {
+  Path? buildPath(Size size, {double margin = 0.0}) {
     if (points == null || points.length == 0) {
       return null;
     }
@@ -86,7 +86,7 @@ class GooeyEdge {
     int l = points.length;
     double t = min(1.5, (duration.inMilliseconds - lastT) / 1000 * 60);
     lastT = duration.inMilliseconds;
-    double dampingT = pow(damping, t);
+    double? dampingT = double.tryParse(   pow(damping, t).toString());
 
     for (int i = 0; i < l; i++) {
       _GooeyPoint pt = points[i];
@@ -94,8 +94,8 @@ class GooeyEdge {
       pt.velX += (1.0 - pt.x) * farEdgeTension * t;
       if (touchOffset != null) {
         double ratio =
-            max(0.0, 1.0 - (pt.y - touchOffset.dy).abs() / maxTouchDistance);
-        pt.velX += (touchOffset.dx - pt.x) * touchTension * ratio * t;
+            max(0.0, 1.0 - (pt.y - touchOffset!.dy).abs() / maxTouchDistance);
+        pt.velX += (touchOffset!.dx - pt.x) * touchTension * ratio * t;
       }
       if (i > 0) {
         _addPointTension(pt, points[i - 1].x, t);
@@ -103,7 +103,7 @@ class GooeyEdge {
       if (i < l - 1) {
         _addPointTension(pt, points[i + 1].x, t);
       }
-      pt.velX *= dampingT;
+      pt.velX *= dampingT!;
     }
 
     for (int i = 0; i < l; i++) {
@@ -150,7 +150,7 @@ class _GooeyPoint {
 
   _GooeyPoint([this.x = 0.0, this.y = 0.0]);
 
-  Offset toOffset([Matrix4 transform]) {
+  Offset toOffset([Matrix4? transform]) {
     Offset o = Offset(x, y);
     if (transform == null) {
       return o;
